@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
-import { useHotkeys } from "react-use";
+import { useHotkeys } from "react-hotkeys-hook";
 import { Search, PlusCircle, RefreshCw, Timer } from "lucide-react";
 import { useCommandPalette } from "@/lib/store/command-palette";
 import { useAppStore } from "@/lib/store/app-store";
@@ -17,14 +17,15 @@ export function CommandPalette() {
   const pushRecentSearch = useAppStore((state) => state.pushRecentSearch);
   const { data: results } = useOrdersSearch(query);
 
-  useHotkeys(
-    ["meta+k", "ctrl+k"],
-    (event) => {
-      event.preventDefault();
-      setOpen(!open);
-    },
-    [open]
-  );
+  // Temporarily disabled hotkey functionality
+  // useHotkeys(
+  //   ["meta+k", "ctrl+k"],
+  //   (event) => {
+  //     event.preventDefault();
+  //     setOpen(!open);
+  //   },
+  //   [open]
+  // );
 
   const handleSelect = (value: string) => {
     if (value.startsWith("order:")) {
