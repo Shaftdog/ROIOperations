@@ -1,28 +1,35 @@
-import * as React from "react";
+"use client";
+
+import {
+  forwardRef,
+  type ButtonHTMLAttributes,
+  type KeyboardEvent,
+  type MouseEvent,
+} from "react";
 
 import { cn } from "@/lib/utils/cn";
 
 export interface SwitchProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
 }
 
-const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
+const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
   (
     {
       className,
       checked = false,
       onCheckedChange,
       disabled = false,
-      type,
+      type = "button",
       onClick,
       onKeyDown,
       ...props
     },
     ref
   ) => {
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
 
       if (event.defaultPrevented || disabled) {
@@ -32,7 +39,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
       onCheckedChange?.(!checked);
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
       onKeyDown?.(event);
 
       if (event.defaultPrevented || disabled) {
@@ -47,9 +54,11 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
 
     return (
       <button
-        type={type ?? "button"}
+        ref={ref}
+        type={type}
         role="switch"
         aria-checked={checked}
+        aria-disabled={disabled || undefined}
         data-state={checked ? "checked" : "unchecked"}
         data-disabled={disabled ? "" : undefined}
         className={cn(
@@ -57,7 +66,6 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           className
         )}
         disabled={disabled}
-        ref={ref}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         {...props}
